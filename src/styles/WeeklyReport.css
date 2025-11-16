@@ -1,0 +1,332 @@
+/* WeeklyReport.css - الجزء المعدل */
+
+
+.sidebar-component {
+  background: white;
+  min-width: 250px;
+  max-width: 250px;
+  border-left: 1px solid #e2e8f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.main-content.improved-layout {
+  flex: 1;
+  padding: 25px;
+  direction: rtl;
+  margin-right: 20px; /* لترك مساحة مناسبة على اليمين */
+}
+
+/* تنسيقات الشاشات الكبيرة */
+@media (min-width: 993px) {
+  .sidebar-component {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+}
+
+/* تنسيقات الشاشات الصغيرة */
+@media (max-width: 992px) {
+  .sidebar-component {
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    transform: translateX(100%);
+  }
+
+  .sidebar-component.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .main-content.improved-layout {
+    margin-right: 0;
+    padding-top: 60px;
+  }
+
+  .toggle-btn {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+}
+
+.weekly-report-page {
+  max-width: none;
+  margin: 0 auto;
+  width: 100%;
+}
+
+
+.page-header.improved-header h1 {
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: clamp(24px, 4vw, 28px);
+}
+
+.page-header.improved-header p {
+  color: #ffffff;
+  font-size: clamp(14px, 2vw, 16px);
+  margin-top: 8px;
+}
+
+/* باقي التنسيقات لم تتغير */
+.report-controls-container.improved-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.control-section.improved-control-section, 
+.week-info-section.improved-week-info {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.control-section.improved-control-section h3, 
+.week-info-section.improved-week-info h3 {
+  margin-top: 0;
+  color: #2d3748;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.report-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.control-group select, .control-group input {
+  padding: 12px 15px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background: white;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.control-group select:focus, .control-group input:focus {
+  border-color: #4299e1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.generate-btn.improved-generate-btn {
+  padding: 12px 20px;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin-top: 10px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.generate-btn.improved-generate-btn:hover:not(:disabled) {
+  background: #3182ce;
+}
+
+.generate-btn.improved-generate-btn:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.week-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.week-range {
+  font-size: 16px;
+  color: #2d3748;
+  font-weight: 500;
+  padding: 15px;
+  background: #f7fafc;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.report-results.improved-results {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.report-header.improved-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.report-header.improved-report-header h2 {
+  color: #2d3748;
+  margin: 0;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.performance-summary.improved-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.summary-item {
+  padding: 18px 25px;
+  border-radius: 10px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.summary-item.total-score {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border: 1px solid #bee3f8;
+}
+
+.summary-item.percentage-score {
+  background: #f0fff4;
+  color: #2f855a;
+  border: 1px solid #c6f6d5;
+}
+
+.summary-item .score-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.report-grid.improved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.report-item.improved-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: #f7fafc;
+  border-radius: 10px;
+  border-left: 4px solid #4299e1;
+  transition: all 0.2s;
+  border: 1px solid #e2e8f0;
+}
+
+.report-item.improved-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+  border-left: 4px solid #2b6cb0;
+}
+
+.item-label {
+  font-weight: 500;
+  color: #2d3748;
+  font-size: 16px;
+}
+
+.score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex: 1;
+  max-width: 120px;
+}
+
+.score {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.score-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #4299e1, #3182ce);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* تنسيقات هيدر صفحة التقرير الأسبوعي */
+.weekly-report-header {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.weekly-report-header h1 {
+  color: white;
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.weekly-report-header p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 1.1rem;
+}

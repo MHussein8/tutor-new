@@ -1,0 +1,356 @@
+/* StudentsPage.css - مدمج ومصحح بالكامل */
+
+/* تنسيقات الصفحة الرئيسية */
+.students-page-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* تنسيقات زر الإضافة والبحث */
+.dashboard-header-with-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-header-with-btn h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.btn-add-student {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-student:hover {
+  background-color: #0056b3;
+}
+
+.search-container {
+  margin-bottom: 25px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* تنسيقات الجدول */
+.students-list-section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: right;
+  direction: rtl;
+}
+
+.students-table thead th {
+  padding: 15px;
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.students-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.2s ease;
+}
+
+.students-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.students-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.students-table td {
+  padding: 15px;
+  color: #2d3748;
+  vertical-align: middle;
+}
+
+.students-table .student-name {
+  font-weight: 500;
+}
+
+/* تنسيقات العناصر داخل الجدول */
+.grade-pill {
+  display: inline-block;
+  background-color: #e0f2fe;
+  color: #007bff;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.performance-score {
+  font-weight: 600;
+  color: #28a745; /* لون أخضر للدرجات */
+}
+
+/* تم تعديل هذا الكلاس */
+.student-actions {
+  display: flex;
+  gap: 12px; /* تم زيادة التباعد هنا */
+  justify-content: center; /* تم تغييرها لتوسيط الأزرار */
+}
+
+.action-btn-small {
+  background-color: #e9ecef;
+  color: #495057;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.action-btn-small:hover {
+  background-color: #dee2e6;
+  transform: translateY(-1px);
+}
+
+.action-btn-small.assess-now {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.action-btn-small.assess-now:hover {
+  background-color: #0056b3;
+}
+
+.action-btn-small.btn-delete {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.action-btn-small.btn-delete:hover {
+  background-color: #f5c6cb;
+}
+
+/* رسائل الحالة */
+.loading-message, .empty-state-list {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.loading-message {
+  color: #555;
+  font-size: 1.2rem;
+}
+
+.empty-state-list {
+  color: #777;
+}
+
+.empty-state-list .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+/* تنسيقات إضافية لنوع التعليم */
+.education-type-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.education-type-badge.type-1 {
+    background-color: #e0f2fe; /* أزرق فاتح */
+    color: #007bff; /* أزرق */
+}
+
+.education-type-badge.type-2 {
+    background-color: #fce7f3; /* وردي فاتح */
+    color: #db2777; /* وردي غامق */
+}
+
+
+/* تنسيقات متجاوبة */
+@media (max-width: 768px) {
+  .students-table thead {
+    display: none;
+  }
+  .students-table, .students-table tbody, .students-table tr, .students-table td {
+    display: block;
+    width: 100%;
+  }
+  .students-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .students-table td {
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px;
+  }
+  .students-table td:last-child {
+    border-bottom: none;
+  }
+  .students-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 120px; /* لضمان تنسيق متناسق للتسميات */
+    margin-left: 10px;
+    color: #555;
+  }
+  /* توسيط الأزرار في الوضع المتجاوب أيضاً */
+  .students-table td:has(.student-actions) {
+    text-align: center;
+  }
+}
+/* تنسيق مجموعة الأزرار */
+.actions-group {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-add-student, .btn-add-parent {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-student {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-add-parent {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+}
+
+.btn-add-student:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-add-parent:hover {
+  background: linear-gradient(135deg, #0f857a 0%, #2ecc71 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+}
+
+.btn-add-student:active, .btn-add-parent:active {
+  transform: translateY(0);
+}
+
+/* تحسين للشاشات الصغيرة */
+@media (max-width: 768px) {
+  .actions-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-add-student, .btn-add-parent {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .dashboard-header-with-btn {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+.filters-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.btn-clear-filters {
+  padding: 10px 15px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-clear-filters:hover {
+  background: #d32f2f;
+}
+
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-select {
+    min-width: auto;
+  }
+}

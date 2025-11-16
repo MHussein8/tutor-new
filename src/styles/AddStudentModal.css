@@ -1,0 +1,202 @@
+/* AddStudentModal.css */
+
+/* General Modal Overlay */
+.modal-overlay.simple-style {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Softer overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal Content Box */
+.modal-content.simple-style {
+    background-color: #ffffff; /* Clean white background */
+    padding: 30px;
+    border-radius: 12px; /* Slightly more rounded corners */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Lighter, subtle shadow */
+    width: 90%;
+    max-width: 500px; /* Consistent max-width */
+    position: relative;
+    max-height: 90vh; /* Allow scrolling if content is long */
+    overflow-y: auto;
+    animation: slideIn 0.3s ease-out;
+    direction: rtl; /* Ensure RTL for content */
+    text-align: right; /* Align text to the right */
+}
+
+/* Modal Header */
+.modal-header.simple-style {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Light separator */
+}
+
+.modal-header.simple-style h2 {
+    margin: 0;
+    font-size: 1.8rem; /* Slightly larger title */
+    color: #333;
+    font-weight: 600;
+}
+
+/* Close Button */
+.close-button.simple-style {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0; /* Remove default padding */
+    line-height: 1; /* Adjust line height */
+}
+
+.close-button.simple-style:hover {
+    color: #555;
+}
+
+/* Form Styling */
+.student-form.simple-style .form-group.simple-style {
+    margin-bottom: 20px;
+}
+
+.student-form.simple-style label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.student-form.simple-style input[type="text"],
+.student-form.simple-style input[type="date"],
+.student-form.simple-style input[type="tel"],
+.student-form.simple-style input[type="email"],
+.student-form.simple-style select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd; /* Lighter border */
+    border-radius: 8px; /* Softer corners for inputs */
+    font-size: 1rem;
+    color: #333;
+    background-color: #f9f9f9; /* Slight background tint */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.student-form.simple-style input:focus,
+.student-form.simple-style select:focus {
+    border-color: #a7d9ff; /* Subtle blue focus */
+    box-shadow: 0 0 0 3px rgba(167, 217, 255, 0.3); /* Soft glow */
+    outline: none;
+    background-color: #fff;
+}
+
+/* Error and Success Messages */
+.error-message {
+    background-color: #ffe0e0;
+    color: #cc0000;
+    border: 1px solid #cc0000;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.success-message {
+    background-color: #e0ffe0;
+    color: #008000;
+    border: 1px solid #008000;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+
+/* Form Actions / Buttons */
+.form-actions.simple-style {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Space between buttons */
+    margin-top: 30px;
+}
+
+.form-actions.simple-style button {
+    padding: 12px 25px;
+    border-radius: 8px; /* Consistent button radius */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    font-weight: 500;
+}
+
+.form-actions.simple-style .btn-primary.simple-style {
+    background-color: #007bff; /* Standard blue */
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.form-actions.simple-style .btn-primary.simple-style:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.form-actions.simple-style .btn-secondary.simple-style {
+    background-color: #f0f0f0; /* Light gray */
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.form-actions.simple-style .btn-secondary.simple-style:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.form-actions.simple-style button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .modal-content.simple-style {
+        padding: 20px;
+        max-width: 95%;
+    }
+
+    .modal-header.simple-style h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-actions.simple-style {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-actions.simple-style button {
+        width: 100%;
+    }
+}

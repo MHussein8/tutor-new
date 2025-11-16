@@ -1,0 +1,95 @@
+
+/* TeacherLogin.css - Login page styles */
+
+/* Login container - Centers the form on the page */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Login form - Card style */
+.login-form {
+  background-color: var(--card-bg);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.login-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.login-form h2 {
+  margin: 0 0 30px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Form group for inputs */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.login-input {
+  width: 100%;
+  padding: 15px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  direction: rtl;
+  text-align: right;
+}
+
+.login-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(93, 80, 198, 0.15);
+}
+
+/* Submit button - Matches dashboard button style */
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 30px 20px;
+  }
+  .login-form h2 {
+    font-size: 1.8rem;
+  }
+  .login-input, .login-btn {
+    font-size: 1rem;
+  }
+}

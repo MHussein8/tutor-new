@@ -1,0 +1,328 @@
+/* أنماط قسم رسائل المعلم */
+.teacher-messages-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+}
+
+.messages-title {
+  font-size: 1.8rem;
+  color: #3a3a3a;
+  margin-bottom: 1.5rem;
+  text-align: right;
+  font-weight: 700;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.message-card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border-right: 4px solid #4a6fa1;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.message-card.unread {
+  border-right-color: #e74c3c;
+  background-color: #fff9f9;
+}
+
+.message-card.expanded {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.message-header {
+  padding: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.message-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.message-topic {
+  background-color: #4a6fa1;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.message-date {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.message-student-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
+.student-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.parent-name {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.anonymous-badge {
+  font-size: 0.85rem;
+  color: #e67e22;
+  background-color: #fff0e8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 15px;
+}
+
+.unread-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 12px;
+  height: 12px;
+  background-color: #e74c3c;
+  border-radius: 50%;
+}
+
+.message-content {
+  padding: 0 1.2rem 1.2rem;
+  border-top: 1px solid #eee;
+  margin-top: 0.5rem;
+}
+
+.message-content p {
+  margin-top: 1rem;
+  line-height: 1.6;
+  color: #333;
+  text-align: right;
+}
+
+.message-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.reply-button {
+  background-color: #4a6fa1;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.reply-button:hover {
+  background-color: #3d5d87;
+}
+
+.message-replies {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #ddd;
+}
+
+.message-replies h4 {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.8rem;
+  text-align: right;
+}
+
+.reply-item {
+  background-color: #f0f7ff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.reply-date {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.reply-text {
+  color: #333;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.no-messages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  color: #888;
+  text-align: center;
+}
+
+.no-messages-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+/* أنماط نموذج الرد */
+.teacher-reply-form {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
+}
+
+.reply-form-title {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+  text-align: right;
+}
+
+.original-message {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.original-message h4 {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  text-align: right;
+}
+
+.original-message p {
+  color: #333;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+  text-align: right;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: inherit;
+  resize: vertical;
+  direction: rtl;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancel-button {
+  background-color: #f1f1f1;
+  color: #555;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+  background-color: #e5e5e5;
+}
+
+.send-button {
+  background-color: #4a6fa1;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #3d5d87;
+}
+
+.send-button:disabled,
+.cancel-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+/* تحسينات للتجاوب مع الشاشات المختلفة */
+@media (max-width: 768px) {
+  .teacher-messages-container {
+    padding: 1rem;
+  }
+  
+  .message-header {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .message-student-info {
+    align-items: flex-end;
+  }
+  
+  .unread-badge {
+    top: 0.8rem;
+    left: 0.8rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .cancel-button,
+  .send-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,83 @@
+.App {
+  text-align: center;
+}
+:root {
+  /* الألوان الأساسية - خد من TeacherDashboard.css */
+  --primary-color: #5d50c6;
+  --primary-light: #7c6eff;
+  --secondary-color: #007bff;
+  --accent-color: #00bcd4;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --info-color: #2196f3;
+
+  /* النصوص - خد من TeacherDashboard.css */
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --dark-text: #2c3e50;
+  --light-text: #7f8c8d;
+
+  /* الخلفيات - خد من TeacherDashboard.css */
+  --bg-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --light-bg: #f5f7fa;
+  --white: #ffffff;
+
+  /* الحدود - خد من TeacherDashboard.css */
+  --border-color: #dee2e6;
+
+  /* الظلال - خد الأفضل من الاتنين */
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --hover-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+
+  /* أخرى */
+  --border-radius: 20px;
+  --transition: all 0.4s ease;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  direction: rtl;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,14 @@
+:root {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --success: #4cc9f0;
+  --danger: #f72585;
+  --warning: #f8961e;
+  --info: #4895ef;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --sidebar-width: 250px;
+}
+
+/* إضافة كل أنماط CSS السابقة هنا */
+/* يمكن تقسيمها إلى ملفات منفصلة لكل مكون */

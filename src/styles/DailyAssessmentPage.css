@@ -1,0 +1,427 @@
+/* DailyAssessmentPage.css - تنسيق إبداعي لجلسة التقييم اليومي */
+
+/* 🌟 تنسيقات الهيدر الرئيسي */
+.daily-assessment-page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.daily-assessment-page-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+.daily-assessment-page-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.daily-assessment-page-header .header-text {
+    flex: 1;
+    text-align: center;
+}
+
+.daily-assessment-page-header .header-text h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.daily-assessment-page-header .header-text p {
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* 🎯 زر إعداد العناصر */
+.assessment-config-btn {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(15px);
+    min-width: 160px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-config-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.assessment-config-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.assessment-config-btn:hover::before {
+    left: 100%;
+}
+
+.assessment-config-btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* 📊 تنسيقات قسم التقييم */
+.assessment-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.assessment-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.assessment-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 30px 0;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--primary-color);
+    position: relative;
+}
+
+.assessment-title::after {
+    content: "✨";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+}
+
+/* 🎓 شبكة طلاب التقييم */
+.students-assessment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.student-score-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fe 100%);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.student-score-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.student-score-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
+}
+
+.student-score-card:hover::before {
+    opacity: 1;
+}
+
+/* رأس بطاقة الطالب */
+.student-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+.student-avatar-elegant {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+.student-score-card:hover .student-avatar-elegant {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4);
+}
+
+.student-card-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.student-grade {
+    margin-left: auto;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    color: #64748b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+}
+
+/* 🎯 شبكة إدخال الدرجات */
+.scores-input-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    position: relative;
+    z-index: 2;
+}
+
+.score-input-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.score-input-item label {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.score-input-item label::before {
+    content: "🎯";
+    font-size: 0.9rem;
+}
+
+.score-input-item input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.score-input-item input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+}
+
+.score-input-item input::placeholder {
+    color: #a0aec0;
+    font-weight: normal;
+}
+
+/* 📱 تصميم متجاوب */
+@media (max-width: 768px) {
+    .daily-assessment-header {
+        padding: 20px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .header-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .assessment-config-btn {
+        min-width: 140px;
+        padding: 10px 18px;
+    }
+    
+    .students-assessment-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .scores-input-group {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    
+    .assessment-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .daily-assessment-header {
+        padding: 15px;
+    }
+    
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-text p {
+        font-size: 1rem;
+    }
+    
+    .student-card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .student-grade {
+        margin-left: 0;
+    }
+}
+
+/* ✨ تأثيرات إضافية للطابع الإبداعي */
+@keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.highlight-card {
+    animation: gentlePulse 2s ease-in-out infinite;
+    border: 2px solid var(--primary-color);
+}
+
+/* رسالة حالة فارغة */
+.empty-assessment-state {
+    text-align: center;
+    padding: 60px 30px;
+    color: var(--text-secondary);
+    background: linear-gradient(135deg, #fcfdfe 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    border: 2px dashed #cbd5e1;
+    margin: 20px 0;
+}
+
+.empty-assessment-icon {
+    font-size: 4.5rem;
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
+.empty-assessment-state h3 {
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.empty-assessment-state p {
+    margin: 0;
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* DailyAssessmentPage.css - إضافة تنسيقات جديدة */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.course-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.course-filter label {
+  color: #fff;
+  font-weight: 500;
+}
+
+.course-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  min-width: 200px;
+}
+
+.message.warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}

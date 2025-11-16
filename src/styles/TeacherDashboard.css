@@ -1,0 +1,858 @@
+/* ========================================= */
+/* 1. التنسيقات العامة والمتغيرات (Globals) */
+/* ========================================= */
+:root {
+    /* ألوان التقييم والإحصائيات */
+    --stat-students: #17a2b8; /* سماوي */
+    --stat-performance: #ffc107; /* أصفر */
+    --stat-assessments: #28a745; /* أخضر */
+    --stat-classes: #6f42c1; /* بنفسجي */
+
+    /* ألوان الحالة */
+    --online-status: #28a745; /* أخضر للأونلاين */
+    --offline-status: #dc3545; /* أحمر للأوفلاين */
+}
+
+
+/* ========================================= */
+/* 2. تنسيقات لوحة التحكم الرئيسية (Dashboard Layout) */
+/* ========================================= */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    transition: margin-right 0.3s ease;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    transition: margin-right 0.3s ease;
+}
+
+.dashboard-header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.dashboard-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,123,255,0.08);
+}
+
+.dashboard-header p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin: 5px 0 0 0;
+}
+
+/* زر أساسي عام */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.3s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    transform: translateY(-1px) scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,123,255,0.18);
+}
+
+/* ========================================= */
+/* 3. تنسيقات الشريط الجانبي (Sidebar) */
+/* ========================================= */
+.sidebar {
+    width: 250px;
+    background: rgba(255,255,255,0.85);
+    color: var(--text-dark);
+    box-shadow: 0 0 30px rgba(0,123,255,0.07);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    border-left: 7px solid var(--primary-color);
+    backdrop-filter: blur(8px);
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-content {
+    padding: 20px 10px;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-logo {
+    padding: 10px 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary-color);
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 8px;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--text-dark);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s;
+    gap: 15px;
+}
+
+.nav-item a:hover {
+    background-color: var(--background-light);
+    color: var(--primary-color);
+}
+
+.nav-item.active a {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+}
+
+/* زر تسجيل الخروج */
+.sidebar-footer {
+    padding: 10px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-btn {
+    width: 100%;
+    background-color: transparent;
+    color: var(--text-dark);
+    padding: 12px 20px;
+    border: none;
+    text-align: right;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    border-radius: 8px;
+}
+
+.logout-btn:hover {
+    background-color: var(--offline-status);
+    color: white;
+}
+
+/* زر الفتح/الإغلاق (Toggle Button) */
+.toggle-btn {
+    display: none;
+}
+
+/* ========================================= */
+/* 4. تنسيقات بطاقات الإحصائيات (Stats Cards) */
+/* ========================================= */
+.stats-section {
+    margin-bottom: 30px;
+}
+
+.stats-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.stats-card {
+    background: linear-gradient(135deg, #e3f0ff 0%, #ffffff 100%);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 123, 255, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-right: 7px solid;
+    animation: fadeInUp 0.7s cubic-bezier(.23,1.02,.53,.97);
+}
+
+.stats-card:hover {
+    transform: scale(1.03) translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0, 123, 255, 0.18);
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+.stat-info {
+    text-align: right;
+}
+
+.stat-value {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+.icon-text {
+    font-size: 2.7rem;
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+}
+
+/* ألوان الأيقونات والحدود حسب نوع الإحصائية */
+.stat-students { border-right-color: var(--stat-students); }
+.stat-students .icon-text { background-color: var(--stat-students); }
+
+.stat-performance { border-right-color: var(--stat-performance); }
+.stat-performance .icon-text { background-color: var(--stat-performance); }
+
+.stat-assessments { border-right-color: var(--stat-assessments); }
+.stat-assessments .icon-text { background-color: var(--stat-assessments); }
+
+.stat-classes { border-right-color: var(--stat-classes); }
+.stat-classes .icon-text { background-color: var(--stat-classes); }
+
+/* ========================================= */
+/* 5. تنسيقات قائمة الطلاب (Student List Panel) */
+/* ========================================= */
+.students-list-section {
+    background: linear-gradient(120deg, #f4f6f9 80%, #e3f0ff 100%);
+    padding: 36px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 123, 255, 0.09);
+    animation: fadeInUp 0.7s cubic-bezier(.23,1.02,.53,.97);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.students-count-badge {
+    background-color: var(--border-color);
+    color: var(--text-dark);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* تنسيقات الفلاتر */
+.filters-container {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 44px 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: border-color 0.3s;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.search-box span {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    appearance: none;
+    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>') no-repeat right 18px center/14px;
+    background-color: var(--card-background);
+    cursor: pointer;
+}
+
+.btn-clear-filters {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 12px 18px;
+    font-size: 1.1rem;
+    min-width: 130px;
+    border-radius: 10px;
+}
+
+.btn-clear-filters:hover {
+    background-color: #5a6268;
+}
+
+/* ========================================= */
+/* 6. تنسيقات جدول الطلاب (Student Table & Row) */
+/* ========================================= */
+.students-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.students-table th,
+.students-table td {
+    padding: 18px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.students-table th {
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.students-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* تنسيقات عمود الطالب (Student Profile) */
+.student-profile {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.student-avatar {
+    width: 52px;
+    height: 52px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+}
+
+.student-name .name {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.student-meta {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* تنسيقات الصف والمستوى (Grade Pill) */
+.grade-pill {
+    display: inline-block;
+    padding: 7px 14px;
+    background-color: #e6f7ff;
+    color: var(--primary-color);
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* تنسيقات الحالة (Status) */
+.status {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.status.online {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--online-status);
+}
+
+.status.offline {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--offline-status);
+}
+
+/* تنسيقات آخر تقييم (Last Assessment) */
+.last-assessment-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.assessment-score {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.assessment-date {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 3px;
+}
+
+/* تنسيقات الإجراءات (Actions) */
+.student-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.action-btn-small {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.action-btn-small:hover {
+    background-color: var(--background-light);
+}
+
+.assess-now {
+    background-color: var(--stat-assessments);
+    color: white;
+    border-color: var(--stat-assessments);
+}
+
+.assess-now:hover {
+    background-color: #218838;
+}
+
+/* ========================================= */
+/* 7. تنسيقات حالة الفراغ والتحميل (Empty/Loading State) */
+/* ========================================= */
+.loading-page,
+.empty-state-list,
+.loading-state {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--card-background);
+    border-radius: 16px;
+    margin: 24px 0;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.07);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.empty-state-list h3 {
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.empty-state-list p {
+    color: var(--text-light);
+}
+
+/* ========================================= */
+/* 8. تنسيقات نموذج الإضافة (AddStudentModal) */
+/* ========================================= */
+.modal-overlay.simple-style {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content.simple-style {
+    background-color: var(--card-background);
+    padding: 36px;
+    border-radius: 14px;
+    width: 90%;
+    max-width: 520px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95);}
+    to { opacity: 1; transform: scale(1);}
+}
+
+.modal-header.simple-style {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-header.simple-style h2 {
+    margin: 0;
+    font-size: 1.7rem;
+}
+
+.close-button.simple-style {
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: color 0.2s;
+}
+
+.close-button.simple-style:hover {
+    color: var(--offline-status);
+}
+
+.student-form.simple-style .form-group {
+    margin-bottom: 18px;
+}
+
+.student-form.simple-style label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.student-form.simple-style input[type="text"],
+.student-form.simple-style input[type="date"],
+.student-form.simple-style select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 1.1rem;
+    transition: border-color 0.3s;
+}
+
+.student-form.simple-style input:focus,
+.student-form.simple-style select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.form-actions.simple-style {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 34px;
+}
+
+.btn-secondary.simple-style {
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-secondary.simple-style:hover {
+    background-color: #5a6268;
+}
+
+.btn-primary.simple-style {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-primary.simple-style:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+}
+
+.error-message {
+    color: var(--offline-status);
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--offline-status);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.success-message {
+    color: var(--online-status);
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--online-status);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+/* ========================================= */
+/* 9. التنسيقات المتجاوبة (Media Queries) */
+/* ========================================= */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+        position: fixed;
+        right: 0;
+        transform: translateX(100%);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+        border-left: none;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        padding: 20px;
+        width: 100%;
+        margin-right: 0;
+    }
+    
+    .dashboard-layout {
+        display: block;
+    }
+
+    .toggle-btn {
+        display: block;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1001;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 123, 255, 0.5);
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .stats-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+    
+    .btn-clear-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 85vw;
+        max-width: 340px;
+        min-width: 220px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        z-index: 2000;
+        background: white;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.18);
+        transform: translateX(100%);
+        transition: transform 0.3s;
+        border-left: none;
+        border-radius: 0 0 0 18px;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .toggle-btn {
+        display: block;
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 2100;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 123, 255, 0.5);
+    }
+    .main-content {
+        padding: 12px;
+        margin-right: 0;
+    }
+}
+
+/* تحسينات إضافية للرسم البياني */
+.chart-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(99, 102, 241, 0.3) 50%, 
+        transparent 100%);
+}
+
+.report-charts-section {
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.report-charts-section h2 {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    margin: 0;
+    padding: 20px 24px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.no-chart-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 16px;
+    background: #f9fafb;
+    border-radius: 0 0 16px 16px;
+}
+
+@media (min-width: 768px) {
+    .weekly-plan-tabs {
+        position: sticky;
+        top: 0;
+        z-index: 50; 
+    }
+}

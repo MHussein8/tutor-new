@@ -1,3 +1,8 @@
+[build]
+  # هذا السطر يطلب من Netlify تجاهل فحص الأسرار للمتغيرين المحددين
+  # هذا يحل خطأ "Secrets scanning found secrets in build"
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_URL,REACT_APP_SUPABASE_ANON_KEY"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

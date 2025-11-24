@@ -244,13 +244,28 @@ const TeacherDashboard = () => {
 <div className="dashboard-header">
     <div className="welcome-section">
         <div className="welcome-text">
-            <h1>مرحباً بك، {currentTeacher?.first_name} {currentTeacher?.last_name} 👋</h1>
+            <h1>مرحباً بك، {currentTeacher?.first_name} {currentTeacher?.last_name}</h1>
             <p>نظام إدارة الفصل الدراسي - {currentTeacher?.subject || 'المادة'}</p>
+            
+            {/* إحصائيات مبسطة للجوّال - التاريخ والكورسات فقط */}
+            <div className="header-stats-mobile">
+                <div className="stats-row">
+                    <span className="stat-item">
+                        <span className="stat-icon">📅</span>
+                        <span className="stat-text">{new Date().toLocaleDateString('ar-EG')}</span>
+                    </span>
+                    <span className="stat-item">
+                        <span className="stat-icon">📚</span>
+                        <span className="stat-text">{courses.length} كورس</span>
+                    </span>
+                </div>
+            </div>
         </div>
-        <div className="header-stats">
+        
+        {/* الإحصائيات للشاشات الكبيرة - التاريخ والكورسات فقط */}
+        <div className="header-stats-desktop">
             <span className="stat-item">📅 {new Date().toLocaleDateString('ar-EG')}</span>
             <span className="stat-item">📚 {courses.length} كورس</span>
-            <span className="stat-item">👨‍🎓 {stats.totalStudents} طالب</span>
         </div>
     </div>
 </div>

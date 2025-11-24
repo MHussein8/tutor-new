@@ -1,4 +1,4 @@
-/* CourseManagement.css - تنسيقات خاصة بصفحة إدارة الكورسات فقط */
+/* CourseManagement.css - تنسيقات خاصة بصفحة إدارة الكورسات فقط (الكود النهائي والمعدل) */
 
 .courses-management-container {
   padding: 30px;
@@ -78,18 +78,26 @@
 .course-card {
   background: white;
   border-radius: 12px;
-  padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  /* تغيير أساسي: استخدام flexbox لتقسيم المحتوى والأزرار */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .course-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-color: #4f46e5;
+}
+
+/* تنسيق محتوى الكرت العلوي */
+.course-card .card-top-content {
+    padding: 24px 24px 0 24px; /* ترك مساحة سفلية فارغة ليفصلها الأزرار */
 }
 
 .course-card h3 {
@@ -99,11 +107,14 @@
   color: #1e293b;
 }
 
-.course-card p {
+/* تم تحديث الوسم p الأصلي ليصبح .course-description في الكود أعلاه */
+.course-card .course-description {
   margin: 0 0 20px 0;
   color: #64748b;
   line-height: 1.5;
-  min-height: 60px;
+  min-height: 60px; /* ضمان ارتفاع ثابت للوصف */
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 /* معلومات الكورس */
@@ -131,7 +142,7 @@
   font-weight: bold;
 }
 
-/* إحصائيات الكورس */
+/* إحصائيات الكورس (تم إبقائها إذا كنت تخطط لإضافتها لاحقاً) */
 .course-stats {
   display: flex;
   gap: 16px;
@@ -161,62 +172,81 @@
   margin-top: 4px;
 }
 
-/* أزرار الإدارة */
+/* ======================================= */
+/* 4. تنسيقات منطقة الأزرار الجديدة (Actions) */
+/* ======================================= */
+
 .course-actions {
   display: flex;
   gap: 8px;
-  margin-top: 20px;
+  padding: 15px 24px;
+  background: #fafafa; /* خلفية خفيفة لتمييز قسم الأزرار */
+  border-top: 1px solid #e2e8f0;
 }
 
-.btn-manage {
-  background: #4f46e5;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  flex: 1;
+/* تنسيق مشترك لجميع الأزرار والروابط داخل Actions */
+.course-actions .btn-action {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none; /* للرابط */
+    flex: 1; /* جعل الأزرار تتوزع بالتساوي */
+    white-space: nowrap; 
 }
 
-.btn-manage:hover {
-  background: #4338ca;
+/* زر التعديل (لون ثانوي - أزرق فاتح) */
+.course-actions .btn-edit-course {
+    background: #e0e7ff; 
+    color: #4f46e5; 
+}
+.course-actions .btn-edit-course:hover {
+    background: #c7d2fe;
 }
 
-.btn-edit {
-  background: #f59e0b;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+/* رابط إدارة الطلاب (اللون الأساسي - أزرق داكن) */
+.course-actions .btn-enrollment {
+    background: #4f46e5; 
+    color: white;
+}
+.course-actions .btn-enrollment:hover {
+    background: #4338ca;
 }
 
-.btn-edit:hover {
-  background: #d97706;
+/* زر الحذف (الأحمر) */
+.course-actions .btn-delete-course {
+    background: #ef4444; 
+    color: white;
+}
+.course-actions .btn-delete-course:hover:not(:disabled) {
+    background: #dc2626;
 }
 
-.btn-delete {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+/* تنسيق حالة الإيقاف (Disabled) */
+.course-actions .btn-delete-course:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
-.btn-delete:hover {
-  background: #dc2626;
-}
+/* ======================================= */
+/* 5. تنسيقات العناصر المتبقية (من الكود الأصلي) */
+/* ======================================= */
 
 /* حالة عدم وجود كورسات */
 .empty-courses {
   text-align: center;
   padding: 60px 20px;
   color: #64748b;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+  margin-top: 30px;
 }
 
 .empty-courses h3 {

@@ -14,13 +14,19 @@
 /* قسم التحكم والاختيارات */
 .controls-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
   margin-bottom: 40px;
   background-color: #ffffff;
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.control-group {
+  flex: 1; /* يجعل كل مجموعة تأخذ نفس المساحة */
+  display: flex;
+  flex-direction: column;
 }
 
 .control-group label {
@@ -452,6 +458,10 @@
     flex-direction: column;
     gap: 15px;
   }
+
+    .control-group {
+    width: 100%;
+  }
   
   .controls-section select,
   .generate-report-btn {
@@ -527,3 +537,4 @@
   margin: 0;
   font-size: 1.1rem;
 }
+

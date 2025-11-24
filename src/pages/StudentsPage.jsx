@@ -17,7 +17,7 @@ const StudentsPage = () => {
   const [filterGroupType, setFilterGroupType] = useState('');
   const [filterGradeLevel, setFilterGradeLevel] = useState('');
   const [availableGradeLevels, setAvailableGradeLevels] = useState([]); 
-  const [availableGroupTypes, setAvailableGroupTypes] = useState([]);
+  const [availableGroupTypes, setAvailableGroupTypes] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddParentModalOpen, setIsAddParentModalOpen] = useState(false);
@@ -25,7 +25,7 @@ const StudentsPage = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [loadingCourses, setLoadingCourses] = useState(true);
 
-  // ✅ دالة حساب الأداء المعدلة بناء على الهيكل الفعلي للجداول
+  // ✅ دالة حساب الأداء
   const calculateStudentPerformance = (dailyAssessments) => {
     if (!dailyAssessments || dailyAssessments.length === 0) {
       return 'لا يوجد';
@@ -65,25 +65,21 @@ const StudentsPage = () => {
     return `${average.toFixed(1)}%`;
   };
 
-useEffect(() => {
-    fetchCourseOptions(); // 💡 تم التعديل لاستدعاء الدالة الجديدة
-    fetchCourses();
-  }, []);
-
   useEffect(() => {
-    fetchStudents();
-  }, [selectedCourse]);
+    fetchCourseOptions();
+    fetchCourses();
+  }, []);
 
-const fetchCourseOptions = async () => {
-    try {
-      const courseOptions = await courseService.getTeacherCourseOptions();
-      
-      setAvailableGroupTypes(courseOptions.groupTypes || []);
-      setAvailableGradeLevels(courseOptions.gradeLevels || []);
-    } catch (error) {
-      console.error('Error fetching course options for filters:', error);
-    }
-  };
+  const fetchCourseOptions = async () => {
+    try {
+      const courseOptions = await courseService.getTeacherCourseOptions();
+      
+      setAvailableGroupTypes(courseOptions.groupTypes || []);
+      setAvailableGradeLevels(courseOptions.gradeLevels || []);
+    } catch (error) {
+      console.error('Error fetching course options for filters:', error);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -105,68 +101,68 @@ const fetchCourseOptions = async () => {
     }
   };
 
-  const fetchStudents = async () => {
-    try {
-      setLoading(true);
-      
-      const currentTeacherId = await getCurrentTeacherId();
-      if (!currentTeacherId) {
-        console.error('لا يمكن تحديد هوية المدرس');
-        return;
-      }
-
-      // جلب الطلاب حسب الكورس المختار
-      let studentsData;
-      
-      if (!selectedCourse || selectedCourse === '') {
-        // في حالة عدم اختيار كورس، يجب أن لا تظهر قائمة الطلاب لتفويض المعلم بضرورة اختيار كورس أولاً.
-        setStudents([]);
-        setLoading(false);
-        return;
-      } else {
-        // طلاب كورس معين
-        const { data, error } = await supabase
-          .from('course_enrollments')
-          .select(`
-            student_id,
-            color_group,
-            students!inner(
-              *,
-              grade_levels(*),
-              group_types(*),
-              daily_assessments(
-                *,
-                daily_assessment_results(score_value, field_snapshot)
-              )
-            )
-          `)
-          .eq('course_id', selectedCourse)
-          .order('color_group');
+  // ⭐️ تم دمج دالة fetchStudents داخل useEffect لتجنب تحذيرات الاعتمادات ⭐️
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        setLoading(true);
         
-        if (error) throw error;
-        studentsData = (data || []).map(item => ({
-          ...item.students,
-          color_group: item.color_group
-        }));
+        const currentTeacherId = await getCurrentTeacherId();
+        if (!currentTeacherId) {
+          console.error('لا يمكن تحديد هوية المدرس');
+          return;
+        }
+
+        let studentsData;
+        
+        if (!selectedCourse || selectedCourse === '') {
+          setStudents([]);
+          setLoading(false);
+          return;
+        } else {
+          const { data, error } = await supabase
+            .from('course_enrollments')
+            .select(`
+              student_id,
+              color_group,
+              students!inner(
+                *,
+                grade_levels(*),
+                group_types(*),
+                daily_assessments(
+                  *,
+                  daily_assessment_results(score_value, field_snapshot)
+                )
+              )
+            `)
+            .eq('course_id', selectedCourse)
+            .order('color_group');
+          
+          if (error) throw error;
+          studentsData = (data || []).map(item => ({
+            ...item.students,
+            color_group: item.color_group
+          }));
+        }
+
+        setStudents(studentsData);
+
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setStudents(studentsData);
-
-    } catch (error) {
-      console.error('Error fetching students:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchStudents();
+  }, [selectedCourse]); // ✅ الاعتماد الوحيد هو selectedCourse
 
   const handleDeleteStudent = async (studentId) => {
     const confirmDelete = window.confirm("هل أنت متأكد من حذف هذا الطالب؟ سيتم حذف جميع تقييماته أيضًا.");
     if (!confirmDelete) return;
 
     try {
-      // ✅ الحذف المصحح بناء على الهيكل الفعلي
-      
-      // 1. حذف نتائج التقييمات أولاً
+      // 1. حذف نتائج التقييمات
       const { error: resultsError } = await supabase
         .from('daily_assessment_results')
         .delete()
@@ -209,12 +205,10 @@ const fetchCourseOptions = async () => {
   };
 
   const filteredStudents = students.filter(student => {
-    // فلتر البحث بالاسم
     const nameMatch = `${student.first_name} ${student.last_name}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     
-    // ✅ التصحيح: استخدام الأسماء الصحيحة للعلاقات
     const groupTypeMatch = filterGroupType === '' || 
       student.group_types?.name === filterGroupType;
     
@@ -237,9 +231,6 @@ const fetchCourseOptions = async () => {
           <div className="dashboard-header-with-btn">
             <h1>قائمة الطلاب</h1>
             <div className="actions-group">
-              <button className="btn btn-primary" onClick={() => navigate('/course-management')}>
-                <i className="fas fa-book"></i> إدارة الكورسات
-              </button>
               <button 
                 className="btn btn-primary" 
                 onClick={() => setIsAddParentModalOpen(true)}
@@ -249,7 +240,6 @@ const fetchCourseOptions = async () => {
               <button 
                 className="btn-add-student" 
                 onClick={() => setIsModalOpen(true)}
-                disabled={!selectedCourse} // تعطيل زر إضافة طالب في حالة عدم اختيار كورس
               >
                 + إضافة طالب جديد
               </button>
@@ -257,6 +247,7 @@ const fetchCourseOptions = async () => {
           </div>
           
           <div className="filters-container">
+            {/* حقل اختيار الكورس */}
             <div className="filter-group">
               <select 
                 value={selectedCourse} 
@@ -272,25 +263,14 @@ const fetchCourseOptions = async () => {
                 ))}
               </select>
             </div>
-            <div className="filter-group">
-              <div className="search-box">
-                <input
-                  type="text"
-                  placeholder="ابحث باسم الطالب..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  disabled={!selectedCourse}
-                />
-                <span>🔍</span>
-              </div>
-            </div>
             
+            {/* حقل اختيار نوع التعليم */}
             <div className="filter-group">
               <select 
                 value={filterGroupType} 
                 onChange={(e) => setFilterGroupType(e.target.value)}
                 className="filter-select"
-                disabled={!selectedCourse || availableGroupTypes.length === 0} // 💡 تم التعديل
+                disabled={!selectedCourse || availableGroupTypes.length === 0} 
               >
                 <option value="">كل أنواع التعليم</option>
                 {availableGroupTypes.map(group => (
@@ -301,6 +281,7 @@ const fetchCourseOptions = async () => {
               </select>
             </div>
             
+            {/* حقل اختيار الصف الدراسي */}
             <div className="filter-group">
               <select 
                 value={filterGradeLevel} 
@@ -317,6 +298,7 @@ const fetchCourseOptions = async () => {
               </select>
             </div>
             
+            {/* زر مسح الفلاتر */}
             <button 
               className="btn btn-clear-filters"
               onClick={() => {
@@ -327,6 +309,20 @@ const fetchCourseOptions = async () => {
             >
               مسح الفلاتر
             </button>
+          </div>
+          
+          {/* ⭐️ حاوية شريط البحث في سطر منفصل ومحاذاته لليمين ⭐️ */}
+          <div className="search-bar-standalone">
+              <div className="search-box">
+                <input
+                  type="text"
+                  placeholder="ابحث باسم الطالب..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  disabled={!selectedCourse}
+                />
+                <span>🔍</span>
+              </div>
           </div>
 
           <div className="students-list-section">
@@ -340,9 +336,6 @@ const fetchCourseOptions = async () => {
                 <span className="empty-icon">🚫</span>
                 <h3>لا يمكن عرض قائمة الطلاب</h3>
                 <p>يجب عليك إنشاء كورس واحد على الأقل لكي تتمكن من عرض الطلاب المرتبطين به وإدارتهم.</p>
-                <button className="btn btn-primary" onClick={() => navigate('/course-management')}>
-                  اذهب لإدارة الكورسات
-                </button>
               </div>
             
             // 3. حالة عدم اختيار كورس

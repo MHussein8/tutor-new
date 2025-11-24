@@ -1,5 +1,5 @@
 // LessonsManagementPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../services/supabase';
 import { getCurrentTeacherId } from '../services/teacherService';
 import { courseService } from '../services/courseService';
@@ -17,24 +17,14 @@ const LessonsManagementPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [courses, setCourses] = useState([]);
-  const [availableEducationTypes, setAvailableEducationTypes] = useState([]); 
-  const [availableGradeLevels, setAvailableGradeLevels] = useState([]);
+  const [availableEducationTypes, setAvailableEducationTypes] = useState([]);
+  const [availableGradeLevels, setAvailableGradeLevels] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedEducationType, setSelectedEducationType] = useState('all');
   const [selectedGradeLevel, setSelectedGradeLevel] = useState('all');
   const [loadingCourses, setLoadingCourses] = useState(true);
 
-  useEffect(() => {
-    fetchLessons();
-    fetchCourses();
-    fetchCourseOptions();
-  }, []);
-
-  useEffect(() => {
-    fetchLessons();
-  }, [selectedCourse, selectedEducationType, selectedGradeLevel]);
-
-const fetchCourses = async () => {
+  const fetchCourses = async () => {
     setLoadingCourses(true); // ابدأ التحميل
     try {
       const coursesData = await courseService.getTeacherCourses();
@@ -44,20 +34,21 @@ const fetchCourses = async () => {
     } finally {
       setLoadingCourses(false); // انتهى التحميل
     }
-   };
+  };
 
-const fetchCourseOptions = async () => {
-    try {
-      const courseOptions = await courseService.getTeacherCourseOptions();
-      
-      setAvailableEducationTypes(courseOptions.groupTypes || []);
-      setAvailableGradeLevels(courseOptions.gradeLevels || []);
-    } catch (error) {
-      console.error('Error fetching course options for filters:', error);
-    }
-  };
+  const fetchCourseOptions = async () => {
+    try {
+      const courseOptions = await courseService.getTeacherCourseOptions();
+      
+      setAvailableEducationTypes(courseOptions.groupTypes || []);
+      setAvailableGradeLevels(courseOptions.gradeLevels || []);
+    } catch (error) {
+      console.error('Error fetching course options for filters:', error);
+    }
+  };
 
-  const fetchLessons = async () => {
+  // تم تغليف fetchLessons باستخدام useCallback لإزالة تحذير التبعية (Dependency)
+  const fetchLessons = useCallback(async () => {
     try {
       const currentTeacherId = await getCurrentTeacherId();
       if (!currentTeacherId) {
@@ -83,6 +74,7 @@ const fetchCourseOptions = async () => {
         `)
         .eq('teacher_id', currentTeacherId);
 
+      // التبعيات المعتمدة على الحالة
       if (selectedCourse) {
         query = query.eq('course_id', selectedCourse);
       }
@@ -106,30 +98,42 @@ const fetchCourseOptions = async () => {
     } finally {
       setLoading(false);
     }
+  }, [selectedCourse, selectedEducationType, selectedGradeLevel]); // تبعيات دالة fetchLessons
+
+  // Effect لجلب البيانات الأساسية عند التحميل الأول
+  useEffect(() => {
+    fetchLessons();
+    fetchCourses();
+    fetchCourseOptions();
+  }, [fetchLessons]); // إضافة fetchLessons كـ dependency
+
+  // Effect لجلب البيانات عند تغيير الفلاتر (يعتمد على fetchLessons الذي يعتمد على الفلاتر)
+  useEffect(() => {
+    fetchLessons();
+  }, [selectedCourse, selectedEducationType, selectedGradeLevel, fetchLessons]);
+
+  const handleDeleteLesson = async (lessonId) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذه الحصة؟')) return;
+
+    try {
+      // 1. جلب رابط الملف
+      const { data: lesson } = await supabase
+        .from('lessons')
+        .select('assessment_file_url')
+        .eq('id', lessonId)
+        .single();
+
+      // 2. استدعاء دالة الخدمة لحذف الملف والسجل
+      // (دالة الخدمة بها المنطق الأمني)
+      await lessonService.deleteLesson(lessonId, lesson?.assessment_file_url);
+
+      alert('تم حذف الحصة والملف المرتبط بنجاح');
+      fetchLessons();
+    } catch (error) {
+      console.error('Error deleting lesson:', error);
+      alert('حدث خطأ أثناء حذف الحصة: ' + error.message);
+    }
   };
-
-const handleDeleteLesson = async (lessonId) => {
-    if (!window.confirm('هل أنت متأكد من حذف هذه الحصة؟')) return;
-
-    try {
-      // 1. جلب رابط الملف
-      const { data: lesson } = await supabase
-        .from('lessons')
-        .select('assessment_file_url')
-        .eq('id', lessonId)
-        .single();
-
-      // 2. استدعاء دالة الخدمة لحذف الملف والسجل
-      // (دالة الخدمة بها المنطق الأمني)
-      await lessonService.deleteLesson(lessonId, lesson?.assessment_file_url);
-
-      alert('تم حذف الحصة والملف المرتبط بنجاح');
-      fetchLessons();
-    } catch (error) {
-      console.error('Error deleting lesson:', error);
-      alert('حدث خطأ أثناء حذف الحصة: ' + error.message);
-    }
-  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -140,7 +144,7 @@ const handleDeleteLesson = async (lessonId) => {
     });
   };
 
-  const filteredLessons = lessons.filter(lesson => 
+  const filteredLessons = lessons.filter(lesson =>
     lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (lesson.content && lesson.content.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -186,9 +190,9 @@ const handleDeleteLesson = async (lessonId) => {
   }
 
 return (
-    <div className="dashboard-layout">
-      <Sidebar activeTab="classes" isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="main-content">
+    <div className="dashboard-layout">
+      <Sidebar activeTab="classes" isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      <div className="main-content">
         {courses.length === 0 ? (
           <div className="no-courses-placeholder">
             <h3>🚫 لا يمكن إدارة الحصص</h3>
@@ -308,7 +312,7 @@ return (
         <button 
           className="btn btn-clear-filters"
           onClick={() => {
-            setSelectedCourse('all');
+            setSelectedCourse('');
             setSelectedEducationType('all');
             setSelectedGradeLevel('all');
             setSearchTerm('');

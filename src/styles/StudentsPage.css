@@ -316,6 +316,32 @@
   align-items: center;
 }
 
+/* 1. تنسيق الحاوية الأبوية: اجعلها تمتد على العرض الكامل */
+.search-bar-standalone {
+    width: 100%; 
+    margin-bottom: 25px; 
+    /* ⚠️ لا تحتاج إلى display: flex; و justify-content: flex-end; هنا،
+       لأننا سنستخدم خاصية margin: auto على العنصر الداخلي لتحقيق المحاذاة.
+    */
+}
+
+/* 2. تنسيق شريط البحث نفسه: استخدام Margin: auto لدفع العنصر لليمين */
+.search-bar-standalone .search-box {
+    width: 100%; 
+    max-width: 350px; /* العرض الذي تريده */
+    
+    /* 💥 الحل الحاسم: الدفع لليمين (في RTL) */
+    margin-right: 0; 
+    margin-left: auto; /* 👈 هذا السطر يدفع العنصر إلى أقصى اليمين في مساحة 100% */
+}
+
+/* 3. تجاوز تنسيقات الـ input القديمة */
+.search-bar-standalone .search-box input {
+    width: 100%; 
+    /* تأكد من أن الـ padding يتماشى مع موقع الأيقونة */
+    padding: 10px 40px 10px 15px; 
+}
+
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -331,7 +357,7 @@
 }
 
 .btn-clear-filters {
-  padding: 10px 15px;
+  padding: 5px 10px;
   background: #f44336;
   color: white;
   border: none;

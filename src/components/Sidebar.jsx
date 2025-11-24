@@ -46,10 +46,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   return (
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`} ref={sidebarRef}>
       <div className="sidebar-content">
-        <div className="sidebar-logo">
-          <span className="logo-text">نظام المعلم</span>
-        </div>
-        
+<div className="sidebar-logo">
+  <img src="/sana.gif" alt="Sana Logo" className="logo-image" />
+</div>        
         <nav className="sidebar-nav">
           <ul className="nav-list">
             {navItems.map((item) => (

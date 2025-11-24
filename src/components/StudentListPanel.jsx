@@ -1,7 +1,6 @@
 // components/StudentListPanel.jsx (الكود النهائي المحسن)
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { supabase } from '../services/supabase';
+import React, { useState, useCallback, useMemo } from 'react';
 import '../styles/TeacherDashboard.css';
 import StudentRow from './StudentRow'; // <--- الاستيراد الجديد لمكون الصف
 
@@ -59,7 +58,7 @@ const handleAssessStudent = useCallback((studentId) => {
         setActiveTab(TABS.DAILY_INPUT); 
 
         // NOTE: إضافة إدخال لسجل المتصفح لدعم زر "الخلف" للتقييم
-        const urlPath = `/dashboard/assessment/${studentId}`;
+        const urlPath = `/teacher-dashboard?assessment=${studentId}`;
         window.history.pushState(
             { studentId: studentId, tab: TABS.DAILY_INPUT },
             '', 

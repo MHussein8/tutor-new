@@ -14,6 +14,7 @@ import ParentLogin from './pages/ParentLogin';
 import AddParentPage from './pages/AddParentPage';
 import TeacherLogin from './pages/TeacherLogin';
 import StudentDailyReport from './components/StudentDailyReport';
+import CourseEnrollmentPage from './pages/CourseEnrollmentPage';
 // 1. استيراد صفحة ملف الطالب الجديدة
 import StudentProfile from './pages/StudentProfile';
 import './App.css';
@@ -84,6 +85,7 @@ function App() {
         <Route path="/students" element={<StudentsPage />} />
         <Route path="/weekly-plans" element={<TeacherWeeklyPlans />} />
         <Route path="/course-management" element={<CourseManagementPage />} />
+        <Route path="/dashboard/course-enrollment/:courseId" element={<CourseEnrollmentPage />} />
         <Route path="/student-assessments/:studentId" element={<StudentAssessmentsPage />} />
         
         {/* 🔑 المسار الجديد لصفحة ملف الطالب الشاملة */}

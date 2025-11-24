@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../services/supabase';
 import '../styles/TeacherDashboard.css';
 
 // استيراد المكونات
 import StudentListPanel from '../components/StudentListPanel';
 import Sidebar from '../components/Sidebar';
-import AddStudentModal from '../components/AddStudentModal';
 import DailyAssessmentForm from '../components/DailyAssessmentForm';
 import CreateCourseModal from '../components/CreateCourseModal';
 
 // استيراد الخدمات
 import { 
     getCurrentTeacherId,
-    getTeacherStats
+    getTeacherStats,
+    getCurrentTeacher
 } from '../services/teacherService';
 import { courseService } from '../services/courseService';
 import { studentService } from '../services/studentService';
+import { enrollmentService } from '../services/enrollmentService';
 
 // دالة مساعدة لمعالجة التقييمات (لم تتغير)
 const processAssessmentData = (assessments) => {
@@ -68,15 +68,16 @@ const processAssessmentData = (assessments) => {
 
 const TeacherDashboard = () => {
     const [loading, setLoading] = useState(true);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isCreateCourseModalOpen, setIsCreateCourseModalOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [activeTab, setActiveTab] = useState('students-list');
     const [selectedStudentId, setSelectedStudentId] = useState(null);
+    const [selectedCourseId, setSelectedCourseId] = useState('');
+    const [studentCourses, setStudentCourses] = useState([]);
     const [students, setStudents] = useState([]);
     const [courses, setCourses] = useState([]);
-    const [availableGradeLevels, setAvailableGradeLevels] = useState([]); // 💡 جديد
-const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جديد
+    const [availableGradeLevels, setAvailableGradeLevels] = useState([]);
+    const [availableGroupTypes, setAvailableGroupTypes] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(true);
     const [stats, setStats] = useState({ 
         totalStudents: 0, 
@@ -85,6 +86,7 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
         weeklyClasses: 0
     });
     const [teacherId, setTeacherId] = useState(null);
+    const [currentTeacher, setCurrentTeacher] = useState(null);
 
     // دالة جلب البيانات المصححة والآمنة
     const fetchDashboardData = useCallback(async () => {
@@ -99,6 +101,10 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
 
             setTeacherId(currentTeacherId);
 
+            // جلب بيانات المعلم الكاملة
+            const teacherData = await getCurrentTeacher();
+            setCurrentTeacher(teacherData);
+
             // 1. جلب الكورسات أولاً (للتأكد من وجود معلم)
             setLoadingCourses(true);
             const teacherCourses = await courseService.getTeacherCourses();
@@ -112,23 +118,20 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
                 return;
             }
 
-// 2. جلب الإحصائيات والطلاب وخيارات الفلاتر المضيقة
-            const [statsData, studentsData, courseOptions] = await Promise.all([ // 💡 تمت إضافة courseOptions
-                getTeacherStats(),
-                studentService.getTeacherStudents(),
-                courseService.getTeacherCourseOptions() // 💡 استدعاء الدالة الجديدة
-            ]);
+            // 2. جلب الإحصائيات والطلاب وخيارات الفلاتر المضيقة
+            const [statsData, studentsData, courseOptions] = await Promise.all([
+                getTeacherStats(),
+                studentService.getTeacherStudents(),
+                courseService.getTeacherCourseOptions()
+            ]);
             
             // 3. معالجة البيانات وجلب التقييمات بشكل منفصل لضمان الاستقرار
             const studentPromises = (studentsData || []).map(async (student) => {
-                // جلب التقييمات بشكل منفصل (لتجنب أخطاء الاستعلام المعقدة)
-                // ✅ هذه الخطوة تعيد بيانات التقييمات إلى لوحة التحكم
                 let last_assessment_score = '---';
                 let last_assessment_date = null;
 
                 try {
                     const assessments = await studentService.getStudentDailyAssessments(student.id);
-                    // معالجة بيانات التقييم
                     const assessmentResult = processAssessmentData(assessments);
                     last_assessment_score = assessmentResult.last_assessment_score;
                     last_assessment_date = assessmentResult.last_assessment_date;
@@ -145,7 +148,6 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
 
             const processedStudents = await Promise.all(studentPromises);
 
-
             // 4. تحديث الإحصائيات والقائمة
             setStats(prevStats => ({
                 ...prevStats,
@@ -154,19 +156,42 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
 
             setStudents(processedStudents);
             setAvailableGradeLevels(courseOptions.gradeLevels); 
-            setAvailableGroupTypes(courseOptions.groupTypes);
-            
+            setAvailableGroupTypes(courseOptions.groupTypes);
 
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
-            // معالجة الأخطاء بشكل أفضل
             alert(`حدث خطأ في تحميل البيانات: ${error.message}`);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    // useEffect يبقى كما هو
+    // جلب كورسات الطالب عند اختيار طالب للتقييم
+    useEffect(() => {
+        const fetchStudentCourses = async () => {
+            if (selectedStudentId) {
+                try {
+                    console.log('🔍 جاري جلب كورسات الطالب:', selectedStudentId);
+                    const courses = await enrollmentService.getStudentCourses(selectedStudentId);
+                    console.log('📚 الكورسات التي تم جلبها:', courses);
+                    setStudentCourses(courses);
+                    if (courses.length > 0) {
+                        setSelectedCourseId(courses[0].id);
+                        console.log('✅ تم تعيين الكورس الافتراضي:', courses[0].id);
+                    } else {
+                        setSelectedCourseId('');
+                        console.log('⚠️ الطالب غير مسجل في أي كورس');
+                    }
+                } catch (error) {
+                    console.error('❌ Error fetching student courses:', error);
+                    setStudentCourses([]);
+                    setSelectedCourseId('');
+                }
+            }
+        };
+        fetchStudentCourses();
+    }, [selectedStudentId]);
+
     useEffect(() => {
         fetchDashboardData();
     }, [fetchDashboardData]);
@@ -185,10 +210,6 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
-
-    const handleAddStudent = () => {
-        setIsAddModalOpen(true);
-    };
 
     if (loading || loadingCourses) {
         return (
@@ -220,60 +241,128 @@ const [availableGroupTypes, setAvailableGroupTypes] = useState([]); // 💡 جد
                     </div>
                 ) : (
                     <>
-                        <div className="dashboard-header">
-                            <h1>لوحة تحكم المعلم</h1>
-                            <p>مرحباً بك في نظام إدارة الفصل الدراسي</p>
-                            
-                            <div className="header-actions">
-                                <button 
-                                    className="btn btn-primary"
-                                    onClick={handleAddStudent}
-                                >
-                                    + إضافة طالب جديد
-                                </button>
-                            </div>
-                        </div>
-
+<div className="dashboard-header">
+    <div className="welcome-section">
+        <div className="welcome-text">
+            <h1>مرحباً بك، {currentTeacher?.first_name} {currentTeacher?.last_name} 👋</h1>
+            <p>نظام إدارة الفصل الدراسي - {currentTeacher?.subject || 'المادة'}</p>
+        </div>
+        <div className="header-stats">
+            <span className="stat-item">📅 {new Date().toLocaleDateString('ar-EG')}</span>
+            <span className="stat-item">📚 {courses.length} كورس</span>
+            <span className="stat-item">👨‍🎓 {stats.totalStudents} طالب</span>
+        </div>
+    </div>
+</div>
                         <div className="dashboard-content">
-{activeTab === 'students-list' && (
-                                <StudentListPanel 
-                                    stats={stats} 
-                                    students={students} 
-                                    fetchDashboardData={fetchDashboardData}
-                                    teacherId={teacherId}
-                                    availableGradeLevels={availableGradeLevels} 
-                                    availableGroupTypes={availableGroupTypes}
-                                    setActiveTab={setActiveTab} 
-                                    setSelectedStudentId={setSelectedStudentId} 
-                                />
-                            )}
+                            {activeTab === 'students-list' && (
+                                <StudentListPanel 
+                                    stats={stats} 
+                                    students={students} 
+                                    fetchDashboardData={fetchDashboardData}
+                                    teacherId={teacherId}
+                                    availableGradeLevels={availableGradeLevels} 
+                                    availableGroupTypes={availableGroupTypes}
+                                    setActiveTab={setActiveTab} 
+                                    setSelectedStudentId={setSelectedStudentId} 
+                                />
+                            )}
                             
                             {activeTab === 'daily-input' && selectedStudentId && (
-                                <DailyAssessmentForm
-                                    studentId={selectedStudentId} 
-                                    onAssessmentCompleted={() => {
-                                        setActiveTab('students-list');
-                                        fetchDashboardData();
-                                    }}
-                                />
+                                <div className="student-assessment-section">
+                                    {studentCourses.length > 0 && (
+                                        <div className="course-filter-section" style={{ 
+                                            marginBottom: '20px', 
+                                            padding: '20px', 
+                                            backgroundColor: '#e8f5e8', 
+                                            borderRadius: '10px',
+                                            border: '2px solid #28a745',
+                                            boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
+                                        }}>
+                                            {studentCourses.length > 1 ? (
+                                                <>
+                                                    <label style={{ 
+                                                        display: 'block', 
+                                                        marginBottom: '12px', 
+                                                        fontWeight: 'bold', 
+                                                        fontSize: '18px',
+                                                        color: '#155724'
+                                                    }}>
+                                                        🎯 اختر الكورس للتقييم:
+                                                    </label>
+                                                    <select 
+                                                        value={selectedCourseId} 
+                                                        onChange={(e) => setSelectedCourseId(e.target.value)}
+                                                        style={{ 
+                                                            padding: '12px 16px', 
+                                                            borderRadius: '8px', 
+                                                            border: '2px solid #28a745', 
+                                                            width: '100%', 
+                                                            maxWidth: '400px',
+                                                            fontSize: '16px',
+                                                            backgroundColor: 'white',
+                                                            fontWeight: 'bold'
+                                                        }}
+                                                    >
+                                                        {studentCourses.map(course => (
+                                                            <option key={course.id} value={course.id}>
+                                                                {course.name} - {course.grade_levels?.name || 'غير محدد'}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <p style={{ marginTop: '12px', fontSize: '14px', color: '#155724', fontStyle: 'italic' }}>
+                                                        📚 الطالب مسجل في {studentCourses.length} كورس
+                                                    </p>
+                                                </>
+                                            ) : (
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <p style={{ 
+                                                        margin: 0, 
+                                                        fontWeight: 'bold', 
+                                                        fontSize: '18px',
+                                                        color: '#155724'
+                                                    }}>
+                                                        📚 الكورس: <span style={{color: '#007bff'}}>{studentCourses[0].name}</span> - {studentCourses[0].grade_levels?.name || 'غير محدد'}
+                                                    </p>
+                                                    <p style={{ 
+                                                        marginTop: '8px', 
+                                                        fontSize: '14px', 
+                                                        color: '#28a745',
+                                                        fontWeight: '500'
+                                                    }}>
+                                                        ✓ الطالب مسجل في كورس واحد
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                    
+                                    {studentCourses.length === 0 && (
+                                        <div className="no-courses-warning" style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#fff3cd', borderRadius: '8px', border: '1px solid #ffeaa7' }}>
+                                            <p>⚠️ الطالب غير مسجل في أي كورس. الرجاء إضافته إلى كورس أولاً.</p>
+                                        </div>
+                                    )}
+                                    
+                                    <DailyAssessmentForm
+                                        studentId={selectedStudentId} 
+                                        selectedCourseId={selectedCourseId}
+                                        onAssessmentCompleted={() => {
+                                            setActiveTab('students-list');
+                                            fetchDashboardData();
+                                        }}
+                                    />
+                                </div>
                             )}
                         </div>
                     </>
                 )}
             </div>
             
-            <AddStudentModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onStudentAdded={fetchDashboardData}
+            <CreateCourseModal
+                isOpen={isCreateCourseModalOpen}
+                onClose={() => setIsCreateCourseModalOpen(false)}
+                onSuccess={fetchDashboardData} 
             />
-            {/* مودال إنشاء الكورس الجديد */}
-            <CreateCourseModal
-                isOpen={isCreateCourseModalOpen}
-                onClose={() => setIsCreateCourseModalOpen(false)}
-                // عند نجاح الإنشاء، يتم تحديث لوحة التحكم تلقائياً
-                onSuccess={fetchDashboardData} 
-            />
         </div>
     );
 };

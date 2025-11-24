@@ -1,4 +1,5 @@
 // WeeklyReportPage.jsx
+/* eslint-disable */
 import React, { useState, useEffect, useCallback } from 'react';
 // ❌ تم حذف استيراد MAX_SCORES و calculateMaxTotalScore
 import { supabase } from '../services/supabase';

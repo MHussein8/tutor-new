@@ -14,10 +14,15 @@ const StudentRow = React.memo(({
     const lastAssessmentScore = student.last_assessment_score || '---';
     const lastAssessmentDate = student.last_assessment_date; 
     
-    // رسالة التاريخ
-const dateMessage = lastAssessmentDate 
-    ? `آخر تقييم: ${formatDate(lastAssessmentDate)}` 
-    : 'لم يتم التقييم بعد';    
+// رسالة التاريخ
+    // ✅ التصحيح: جعل رسالة التاريخ تعتمد على وجود النتيجة لتجنب الرسالة الثابتة عند فقدان التاريخ
+    const isAssessmentAvailable = lastAssessmentScore !== '---';
+    
+    const dateMessage = (lastAssessmentDate && isAssessmentAvailable)
+        ? `آخر تقييم: ${formatDate(lastAssessmentDate)}`
+        : (isAssessmentAvailable 
+            ? '' 
+            : 'لم يتم التقييم بعد');  
     // حساب عمر الطالب
     const studentAge = student.birth_date 
         ? new Date().getFullYear() - new Date(student.birth_date).getFullYear()

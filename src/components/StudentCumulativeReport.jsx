@@ -1,5 +1,5 @@
 // StudentCumulativeReport.jsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 // ❌ تم حذف استيراد الدالة الديناميكية لحساب المجموع الأقصى و MAX_SCORES
 import { supabase } from '../services/supabase';
 import { getCurrentTeacherId } from '../services/teacherService';

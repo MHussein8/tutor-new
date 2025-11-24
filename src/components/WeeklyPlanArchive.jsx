@@ -86,25 +86,16 @@ if (selectedCourse && selectedCourse !== 'all') {
     }
   }, [teacherId, selectedCourse]);
 
-  // استخدام useMemo لإنشاء دوال مستقرة
-  const stableFetchPlans = useCallback(() => {
-    fetchPlans();
-  }, [fetchPlans]);
-
-  const stableFetchOptions = useCallback(() => {
-    fetchOptions();
-  }, [fetchOptions]);
-
   // useEffect مبسط
-  useEffect(() => {
+useEffect(() => {
     if (teacherId) {
-      fetchPlans();
-      fetchOptions();
-      fetchCourses();
+        fetchPlans();
+        fetchOptions();
+        fetchCourses();
     } else {
-      setLoading(false);
+        setLoading(false);
     }
-  }, [teacherId, selectedCourse]); // إزالة الدوال من dependencies
+}, [teacherId, selectedCourse, fetchPlans, fetchOptions, fetchCourses]);
 
   const deletePlan = async (planId) => {
     // تحسين التحقق من صحة planId

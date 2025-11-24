@@ -4,7 +4,6 @@ import { parentService } from '../services/parentService';
 import parentMessageService from '../services/parentMessageService';
 import ParentMessageForm from '../components/ParentDashboard/ParentMessageForm';
 import AddStudentToParentModal from '../components/ParentDashboard/AddStudentToParentModal';
-import { getParentProfileId } from '../services/parentService';
 import '../styles/ParentDashboard.css';
 import '../styles/ParentDashboardMessages.css';
 
@@ -99,6 +98,7 @@ const ParentDashboard = ({ parentUser, onLogout, parentId }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sentMessages, setSentMessages] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [messageSending, setMessageSending] = useState(false);
   const [mostImprovedSkill, setMostImprovedSkill] = useState(null); 
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
@@ -280,6 +280,7 @@ const ParentDashboard = ({ parentUser, onLogout, parentId }) => {
         }
       }, [selectedStudent, selectedWeek]);
       
+      // eslint-disable-next-line no-unused-vars
       const loadParentMessages = async (studentId) => {
         try {
           const messages = await parentMessageService.getParentMessages(studentId, parentId);
@@ -360,6 +361,7 @@ const ParentDashboard = ({ parentUser, onLogout, parentId }) => {
         setSelectedDay(null); 
       };
     
+      // eslint-disable-next-line no-unused-vars
     const handleDateChange = (e) => {
         const selectedDate = new Date(e.target.value);
         const day = selectedDate.getDay(); 

@@ -30,14 +30,6 @@ const generateWeekDays = (startDate) => {
     return days;
 };
 
-// دالة debounce مساعدة (تم الاحتفاظ بها)
-const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func.apply(null, args), delay);
-    };
-};
 
 // أنواع الحقول المتاحة (بدون تغيير)
 const FIELD_TYPES = [

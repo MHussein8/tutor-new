@@ -117,7 +117,24 @@ export const enrollmentService = {
     if (error) throw error;
     return data;
   },
-
+// تحديث مجموعة اللون لطالب مسجل - ✅ تم إضافة التحقق من الملكية
+  updateEnrollmentGroup: async (enrollmentId, newGroup) => {
+    // 1. التحقق من ملكية المعلم للتسجيل الحالي
+    await checkEnrollmentOwnership(enrollmentId);
+    
+    // 2. إذا كان كل شيء مملوكاً، قم بالتحديث
+    const { data, error } = await supabase
+      .from('course_enrollments')
+      .update({
+        color_group: newGroup
+      })
+      .eq('id', enrollmentId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
   // حذف طالب من كورس - ✅ تم إضافة التحقق من الملكية
   removeStudentFromCourse: async (enrollmentId) => {
     // 1. التحقق من ملكية المعلم للتسجيل الحالي
@@ -164,5 +181,19 @@ export const enrollmentService = {
         color_group: enrollment.color_group,
         ...enrollment.courses
     }));
-  }
+  },
+  
+deleteEnrollmentsForCourse: async (courseId) => {
+    // 1. حذف جميع التسجيلات المرتبطة بالكورس
+    const { error } = await supabase
+      .from('course_enrollments') // جدول التسجيلات
+      .delete()
+      .eq('course_id', courseId);
+    
+    if (error) {
+        console.error('Error deleting course enrollments:', error);
+        throw error;
+    }
+    return true;
+  },
 };

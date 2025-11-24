@@ -84,33 +84,52 @@ const WeeklyReportPage = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const fetchStudents = async () => {
-        try {
-            const currentTeacherId = await getCurrentTeacherId();
-            if (!currentTeacherId) {
-                console.error('لا يمكن تحديد هوية المدرس');
-                return;
-            }
-
-            let query = supabase
-                .from('students')
-                .select('id, first_name, last_name')
-                .eq('teacher_id', currentTeacherId);
-
-if (selectedCourseId) {
-    query = query.eq('course_id', selectedCourseId);
-}
-
-            query = query.order('first_name');
-
-            const { data: studentsData, error } = await query;
-
-            if (error) throw error;
-            setStudents(studentsData || []);
-        } catch (error) {
-            console.error('Error fetching students:', error);
+const fetchStudents = async () => {
+    try {
+        const currentTeacherId = await getCurrentTeacherId();
+        if (!currentTeacherId) {
+            console.error('لا يمكن تحديد هوية المدرس');
+            return;
         }
-    };
+
+        // بناء الاستعلام الصحيح عبر العلاقات
+        let query = supabase
+            .from('students')
+            .select(`
+                id, 
+                first_name, 
+                last_name,
+                course_enrollments!inner(
+                    course_id,
+                    courses!inner(
+                        teacher_id
+                    )
+                )
+            `)
+            .eq('course_enrollments.courses.teacher_id', currentTeacherId);
+
+        // إضافة فلتر الكورس إذا تم اختياره
+        if (selectedCourseId) {
+            query = query.eq('course_enrollments.course_id', selectedCourseId);
+        }
+
+        query = query.order('first_name');
+
+        const { data: studentsData, error } = await query;
+
+        if (error) throw error;
+        
+        // تنظيف البيانات وإزالة التكرارات
+        const uniqueStudents = studentsData ? studentsData.filter((student, index, self) => 
+            index === self.findIndex(s => s.id === student.id)
+        ) : [];
+        
+        setStudents(uniqueStudents);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        setStudents([]);
+    }
+};
     
     // ✅ دالة جديدة لحساب التقرير الأسبوعي بناءً على النتائج التفصيلية
     const processWeeklyAssessments = (dailyAssessments) => {

@@ -191,7 +191,8 @@ const handleViewReport = useCallback((studentId) => {
                     </button>                </div>
                 
                 {/* حالة عدم وجود طلاب (لم تتغير) */}
-                {filteredStudents.length === 0 ? (
+                {/* حالة عدم وجود طلاب (لم تتغير) */}
+                {filteredStudents.length === 0 ? (
                     <div className="empty-state-list">
                         <div className="empty-icon">👨‍🎓</div>
                         <h3>
@@ -205,32 +206,99 @@ const handleViewReport = useCallback((studentId) => {
                         </p>
                     </div>
                 ) : (
-                    /* جدول الطلاب */
-                    <div className="students-table-container">
-                        <table className="students-table">
-<thead>
-    <tr>
-        <th>الاسم</th>
-        <th>الصف</th>
-        <th>نوع التعليم</th>
-        <th>آخر تقييم</th>
-        <th>الإجراءات</th>
-    </tr>
-</thead>
-                            <tbody>
-                                {/* استخدام المكون المحسن StudentRow */}
-                                {filteredStudents.map((student) => (
-<StudentRow
-                                        key={student.id} 
-                                        student={student}
-                                        formatDate={formatDate}
-                                        handleAssessStudent={handleAssessStudent} // <--- التعديل
-                                        handleViewReport={handleViewReport} // <--- التعديل
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <>
+                        {/* جدول الطلاب للشاشات الكبيرة */}
+                        <div className="students-table-container">
+                            <table className="students-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>الصف</th>
+                                        <th>نوع التعليم</th>
+                                        <th>آخر تقييم</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {/* استخدام المكون المحسن StudentRow */}
+                                    {filteredStudents.map((student) => (
+                                        <StudentRow
+                                            key={student.id} 
+                                            student={student}
+                                            formatDate={formatDate}
+                                            handleAssessStudent={handleAssessStudent}
+                                            handleViewReport={handleViewReport}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* كروت الطلاب للشاشات الصغيرة */}
+                        <div className="mobile-students-cards">
+                            {filteredStudents.map((student) => (
+                                <div key={student.id} className="student-card">
+                                    <div className="student-card-header">
+                                        <div className="student-card-avatar">
+                                            {student.first_name?.[0]}{student.last_name?.[0]}
+                                        </div>
+                                        <div className="student-card-info">
+                                            <div className="student-card-name">
+                                                {student.first_name} {student.last_name}
+                                            </div>
+                                            <div className="student-card-meta">
+                                                {student.birth_date && (
+                                                    <span>
+                                                        {new Date().getFullYear() - new Date(student.birth_date).getFullYear()} سنة
+                                                    </span>
+                                                )}
+                                                <span className={`status ${student.group_types?.name === 'اونلاين' ? 'online' : 'offline'}`}>
+                                                    {student.group_types?.name || 'غير محدد'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="student-card-details">
+                                        <div className="student-card-detail">
+                                            <span className="detail-label">الصف</span>
+                                            <span className="detail-value grade-pill">
+                                                {student.grade_levels?.name || `الصف ${student.grade_level_id}`}
+                                            </span>
+                                        </div>
+                                        
+                                        <div className="student-card-detail">
+                                            <span className="detail-label">آخر تقييم</span>
+                                            <span className="detail-value assessment-score">
+                                                {student.last_assessment_score || '---'}
+                                            </span>
+                                            <span className="detail-label assessment-date">
+                                                {student.last_assessment_score !== '---' && student.last_assessment_date ?  
+                                                    `آخر تقييم: ${formatDate(student.last_assessment_date)}` : 
+                                                    (student.last_assessment_score === '---' ? 'لم يتم التقييم بعد' : '')
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="student-card-actions">
+                                        <button 
+                                            className="student-card-action primary" 
+                                            onClick={() => handleAssessStudent(student.id)}
+                                        >
+                                            📝 تقييم
+                                        </button>
+                                        <button 
+                                            className="student-card-action" 
+                                            onClick={() => handleViewReport(student.id)}
+                                        >
+                                            📊 تقرير
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
         </>

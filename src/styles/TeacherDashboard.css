@@ -1409,3 +1409,138 @@
     padding: 6px 8px;
   }
 }
+
+/* ========================================= */
+/* 12. تنسيقات كروت الطلاب للجوّال (Mobile Student Cards) */
+/* ========================================= */
+
+@media (max-width: 768px) {
+    .students-table-container {
+        display: none; /* إخفاء الجدول على الموبايل */
+    }
+    
+    .mobile-students-cards {
+        display: block; /* إظهار الكروت على الموبايل */
+    }
+    
+    .student-card {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color);
+    }
+    
+    .student-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+    }
+    
+    .student-card-avatar {
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    
+    .student-card-info {
+        flex: 1;
+        text-align: right;
+    }
+    
+    .student-card-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+    }
+    
+    .student-card-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+    
+    .student-card-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .student-card-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .detail-label {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+    
+    .detail-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+    
+    .student-card-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+    }
+    
+    .student-card-action {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.2s;
+    }
+    
+    .student-card-action.primary {
+        background-color: var(--stat-assessments);
+        color: white;
+        border-color: var(--stat-assessments);
+    }
+    
+    .student-card-action:hover {
+        background-color: var(--background-light);
+    }
+    
+    .student-card-action.primary:hover {
+        background-color: #218838;
+    }
+}
+
+/* عرض الجدول على الشاشات الكبيرة فقط */
+@media (min-width: 769px) {
+    .mobile-students-cards {
+        display: none;
+    }
+    
+    .students-table-container {
+        display: block;
+    }
+}

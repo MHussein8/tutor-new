@@ -106,7 +106,7 @@ const ParentDashboard = ({ parentUser, onLogout, parentId }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sentMessages, setSentMessages] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [messageSending, setMessageSending] = useState(false);
+  const [setMessageSending] = useState(false);
   const [mostImprovedSkill, setMostImprovedSkill] = useState(null); 
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
   const [recentAssessments, setRecentAssessments] = useState([]);
